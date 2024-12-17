@@ -26,8 +26,8 @@ import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 
 const formSchema = z.object({
-  username: z.string().min(3, {
-    message: "UserName must be at least 3 characters.",
+  fullname: z.string().min(3, {
+    message: "Fullname must be at least 3 characters.",
   }),
   email: z.string().email({
     message: "Invaild Email",
@@ -45,7 +45,7 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      fullname: "",
       email: "",
       password: "",
       role: "patient",
@@ -66,12 +66,12 @@ export default function LoginPage() {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="fullname"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>kullanıcı adı</FormLabel>
+                      <FormLabel>Ad-Soyad</FormLabel>
                       <FormControl>
-                        <Input className='w-[518px]' placeholder="kullanıcıadı" {...field} />
+                        <Input className='w-[518px]' placeholder="ad-soyad" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
