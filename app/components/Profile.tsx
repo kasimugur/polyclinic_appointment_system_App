@@ -33,7 +33,6 @@ export default function Profile() {
             </MenubarSubContent>
           </MenubarSub>
           <MenubarSeparator />
-
           <MenubarItem>
             <Link href={'/appointment'}> Randevularım</Link>
           </MenubarItem>
@@ -43,7 +42,6 @@ export default function Profile() {
           </MenubarItem>
           <MenubarSeparator />
           <MenubarItem>Çıkış <MenubarShortcut><LogOut size={20} /></MenubarShortcut></MenubarItem>
-
         </MenubarContent>
       </MenubarMenu>
     </Menubar>

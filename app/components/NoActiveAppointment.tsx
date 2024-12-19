@@ -1,11 +1,13 @@
 import { CalendarHeart } from 'lucide-react'
 import React from 'react'
-
-export default function NoActiveAppointment() {
+interface NoActiveAppointmentProps{
+  children: string;
+}
+export default function NoActiveAppointment({children}:NoActiveAppointmentProps) {
   return (
     <div className="flex flex-col justify-center items-center h-72 ">
             <CalendarHeart size={100} color='gray' />
-            aktif Randevunuz yok
+            {children} Randevunuz yok
           </div>
   )
 }
