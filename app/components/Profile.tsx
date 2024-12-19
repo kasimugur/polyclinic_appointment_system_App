@@ -14,6 +14,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar"
 import { Bell, ChevronDown, CircleUser, LogOut, MessageSquare, Star, User } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Profile() {
   return (
@@ -33,20 +34,16 @@ export default function Profile() {
           </MenubarSub>
           <MenubarSeparator />
 
-          <MenubarSub>
-            <MenubarSubTrigger>Randevu Bilgileri</MenubarSubTrigger>
-            <MenubarSubContent>
-              <MenubarItem>Randevularım</MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem>Geçmiş Randevularım</MenubarItem>
-            </MenubarSubContent>
-          </MenubarSub>
           <MenubarItem>
-            Favorilerim<MenubarShortcut><Star size={20}/></MenubarShortcut>
+            <Link href={'/appointment'}> Randevularım</Link>
           </MenubarItem>
           <MenubarSeparator />
-          <MenubarItem>Çıkış <MenubarShortcut><LogOut size={20}/></MenubarShortcut></MenubarItem>
-          
+          <MenubarItem>
+            Favorilerim<MenubarShortcut><Star size={20} /></MenubarShortcut>
+          </MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>Çıkış <MenubarShortcut><LogOut size={20} /></MenubarShortcut></MenubarItem>
+
         </MenubarContent>
       </MenubarMenu>
     </Menubar>

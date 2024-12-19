@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { CalendarHeart, Hospital } from 'lucide-react'
+import NoActiveAppointment from './NoActiveAppointment'
 
 export default function Hero() {
   return (
@@ -47,10 +48,7 @@ export default function Hero() {
             <Link href={'#'} className='border-x-2 border-y-2 p-1 rounded-sm  focus:border-b-0' >randevularım</Link>
             <Link href={'#'} className='border-x-2 border-y-2 p-1 rounded-sm focus:border-b-0' >geçmiş Randevular</Link>
           </div>
-          <div className="flex flex-col justify-center items-center h-72 ">
-            <CalendarHeart size={100} color='gray' />
-            aktif Randevunuz yok
-          </div>
+          <NoActiveAppointment />
 
           <Button className='bg-[#e7e7e7] text-gray-400 w-full  hover:bg-[#e7e7e7] mt-10 cursor-no-drop'>Tümünü göster</Button>
         </div>
