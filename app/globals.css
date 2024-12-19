@@ -10,4 +10,22 @@
  @apply size-14 !important;
 }
 
+.active-tab {
+  position: relative;
+}
+
+.active-tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px; /* Kenarlığın hemen altında konumlandırmak için ayarlandı */
+    height: 2px; /* Kenarlık yüksekliği */
+    background-color: white; /* Kenarlık rengi */
+}
+.appointmentButton {
+  @apply border-x border-t px-4  rounded-t-lg rounded-b-none  transition   focus:border-b-0  !important;
+
+}
+
 
