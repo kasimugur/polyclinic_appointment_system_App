@@ -18,7 +18,7 @@ export default function AppointmentPage() {
         <div className="p-4">
           <h1 className='px-6 py-3 text-xl'>Randevu Geçmiş Listesi</h1>
           <div className="mt-2">
-            <Tabs className='' defaultValue="randevular" >
+            <Tabs  defaultValue="randevular" >
               <TabsList className="flex justify-start bg-transparent  border-b">
                 <TabsTrigger value="randevular">
                   <Button value="randevular"

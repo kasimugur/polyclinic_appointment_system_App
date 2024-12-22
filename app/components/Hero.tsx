@@ -16,21 +16,8 @@ export default function Hero() {
       <div className=" flex p-4 rounded-md bg-white  space-x-6">
         <div className="basis-1/3">
           <div className="flex flex-col space-y-6">
-            {/* <Button className="bg-[#358481] hover:bg-[#57b1ae] h-36 md:h-48 " >
-              <Dialog >
-                <DialogTrigger>Open</DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will permanently delete your account
-                      and remove your data from our servers.
-                    </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            </Button> */}
-            <Button className='bg-[#A7161A] hover:bg-[#c54c50] h-36 md:h-48 rounded-xl  shadow-sm' >
+        
+            <Button onClick={()=> router.push('/appointmentForm')} className='bg-[#A7161A] hover:bg-[#c54c50] h-36 md:h-48 rounded-xl  shadow-sm' >
               <div className="flex items-center gap-2">
                 <Hospital className='hospitalIcons' />
                 <div className="text-start">

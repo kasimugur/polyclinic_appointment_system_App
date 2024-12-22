@@ -34,7 +34,7 @@ export default function Profile() {
           </MenubarSub>
           <MenubarSeparator />
           <MenubarItem>
-            <Link href={'/appointment'}> Randevularım</Link>
+            <Link href={'/myappointment'}> Randevularım</Link>
           </MenubarItem>
           <MenubarSeparator />
           <MenubarItem>
