@@ -31,7 +31,7 @@ export default function AppointmentCart() {
           <BriefcaseMedical size={12} />
           <label className='text-sm '>Dentistry (General Dentistry)</label>
         </div>
-        <Button className='px-6  mt-3 bg-[#2DB7F5]' variant={'default'}  size={'icon'} ><CirclePlus /> </Button>
+        <Button className='px-6  mt-3 bg-[#2DB7F5]' variant={'default'} size={'icon'} ><CirclePlus /> </Button>
       </div>
     </div>
   )
