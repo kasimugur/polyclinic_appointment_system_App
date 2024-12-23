@@ -1,14 +1,21 @@
 'use client'
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, BriefcaseMedical, CirclePlus, Hospital, Star, Stethoscope, Tag } from 'lucide-react'
+import { ArrowLeft, BriefcaseMedical, CirclePlus, Hospital, Plus, Star, Stethoscope, Tag } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 export default function Appointment() {
   const router = useRouter()
   return (
-    <div className='py-3  m-4  bg-white w-full border-b'>
-        <Button onClick={() => router.push('/appointmentForm')} className='font-sans px-6 py-[7] text-lg' variant={'ghost'}><ArrowLeft className='mr-1' size={16} /> Randevu Listesi</Button>
-      <div className="flex justify-between border px-6 py-3">
+    <div className='py-3  m-4 h- rounded-xl p-2 min-h-72  bg-white w-full border-b'>
+      <Button onClick={() => router.push('/appointmentForm')} className='font-sans px-6 py-[7] text-lg' variant={'ghost'}><ArrowLeft className='mr-1' size={16} /> Randevu Listesi</Button>
+      <div className="flex justify-around border px-6 py-3">
 
         <div className="flex gap-3 items-center ">
           <Button variant={'ghost'}><Star /></Button>
@@ -32,8 +39,18 @@ export default function Appointment() {
           <BriefcaseMedical size={12} />
           <label className='text-sm '>Dentistry (General Dentistry)</label>
         </div>
-      </div>
 
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger><Button className='bg-[#2DB7F5] hover:bg-[#2db6f5ad] scale-105' onClick={()=> router.push('/appointmentTime')} variant={"secondary"} ><Plus /> </Button></TooltipTrigger>
+              <TooltipContent>
+                <p>Randevu al</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+    
+      </div>
     </div>
   )
 }
