@@ -28,4 +28,7 @@
 
 }
 
+.tabsTrigerBtn{
+  @apply focus:border-b-2 p-1 focus:text-black  border-polycblue !important;
+}
 

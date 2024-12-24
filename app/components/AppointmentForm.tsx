@@ -177,7 +177,7 @@ export default function AppointmentForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button onClick={()=> router.push('/appointments')} type="submit">Submit</Button>
         </form>
       </Form>
     </div>
