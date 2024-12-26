@@ -25,9 +25,9 @@ export default function Profile() {
           <MenubarSub>
             <MenubarSubTrigger>Hesap Bilgileri </MenubarSubTrigger>
             <MenubarSubContent >
-              <MenubarItem><CircleUser className='size-5 mx-3' /> Kişisel Bilgiler</MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem><MessageSquare className='size-5 mx-3' /> İletişim Bilgileri</MenubarItem>
+              <MenubarItem><CircleUser className='size-5 mx-3' /> <Link href={'/personelInfo'}>Kişisel Bilgiler</Link></MenubarItem>
+              {/* <MenubarSeparator />
+              <MenubarItem><MessageSquare className='size-5 mx-3' /> İletişim Bilgileri</MenubarItem> */}
               <MenubarSeparator />
               <MenubarItem><Bell className='size-5 mx-3' /> Bilgilendirme Tercihleri</MenubarItem>
             </MenubarSubContent>

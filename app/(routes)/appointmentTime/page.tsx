@@ -48,7 +48,8 @@ export default function AppointmentTime() {
               <AccordionItem className='bg-polycgray  border rounded-xl' value="item-1">
                 <AccordionTrigger className=' px-3 ' >09:00 </AccordionTrigger>
                 <AccordionContent className='bg-white border-t flex items-center text-center gap-3 w-full'>
-                  {time.map(time => <Button 
+                  {time.map((time, index) => <Button 
+                  key={index}
                     className='bg-polycbtn hover:bg-polycbtnhover hover:text-white focus:bg-polycbtnhover m-1 px-4 text-white'
                     variant={'ghost'}>  {handleClik(time) } </Button>)}
                 </AccordionContent>
@@ -56,7 +57,8 @@ export default function AppointmentTime() {
               <AccordionItem className='bg-polycgray  border rounded-xl' value="item-2">
                 <AccordionTrigger className=' px-3 ' >09:00 </AccordionTrigger>
                 <AccordionContent className='bg-white border-t flex items-center text-center gap-3 w-full'>
-                  {time.map(time => <Button
+                  {time.map((time, index) => <Button
+                  key={index}
                     className='bg-polycbtn hover:bg-polycbtnhover hover:text-white focus:bg-polycbtnhover m-1 px-4 text-white'
                     variant={'ghost'}> {time} </Button>)}
                 </AccordionContent>
@@ -64,7 +66,8 @@ export default function AppointmentTime() {
               <AccordionItem className='bg-polycgray  border rounded-xl' value="item-3">
                 <AccordionTrigger className=' px-3 ' >09:00 </AccordionTrigger>
                 <AccordionContent className='bg-white border-t flex items-center text-center gap-3 w-full'>
-                  {time.map(time => <Button
+                  {time.map((time, index) => <Button
+                  key={index}
                     className='bg-polycbtn hover:bg-polycbtnhover hover:text-white focus:bg-polycbtnhover m-1 px-4 text-white'
                     variant={'ghost'}> {time} </Button>)}
                 </AccordionContent>
@@ -72,7 +75,8 @@ export default function AppointmentTime() {
               <AccordionItem className='bg-polycgray  border rounded-xl' value="item-4">
                 <AccordionTrigger className=' px-3 ' >09:00 </AccordionTrigger>
                 <AccordionContent className='bg-white border-t flex items-center text-center gap-3 w-full'>
-                  {time.map(time => <Button
+                  {time.map((time, index) => <Button
+                  key={index}
                     className='bg-polycbtn hover:bg-polycbtnhover hover:text-white focus:bg-polycbtnhover m-1 px-4 text-white'
                     variant={'ghost'}> {time} </Button>)}
                 </AccordionContent>
