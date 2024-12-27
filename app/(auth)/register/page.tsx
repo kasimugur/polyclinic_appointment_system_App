@@ -4,7 +4,7 @@ import React from 'react'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-
+import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -52,8 +52,17 @@ export default function LoginPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await axios.post('/api/users', values);
+      console.log("Kayıt başarılı mesajı",response.data.message)
+    } catch (error) {
+if (axios.isAxiosError(error)){
+  console.error('Kayıt hatası:', error.response?.data.error || error.message)
+} else {
+  console.error('kayıt katası', error)
+}
+    }
     console.log(values)
   }
   return (
@@ -109,21 +118,20 @@ export default function LoginPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Role</FormLabel>
-                      <FormControl>
-                        <Select>
-                          <SelectTrigger className="w-[518px]">
-                            <SelectValue placeholder="Role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="patient">Hasta</SelectItem>
-                            <SelectItem value="doctor">Doktor</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger className="w-[518px]">
+                          <SelectValue placeholder="Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="patient">Hasta</SelectItem>
+                          <SelectItem value="doctor">Doktor</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <div className='flex flex-col space-y-4'>
 
                   <Link href={'/login'} >
