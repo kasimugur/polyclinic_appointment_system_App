@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -19,14 +19,13 @@ import Link from 'next/link'
 
 const formSchema = z.object({
   email: z.string().email({
-    message: "Invaild Email",
+    message: "Geçersiz E-posta",
   }),
   password: z.string().min(5, {
-    message: "Passwo must be at least 5 characters.",
+    message: "Şifre en az 5 karakter olmalıdır.",
   }),
 })
 export default function LoginPage() {
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,8 +33,8 @@ export default function LoginPage() {
       password:"",
     },
   })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
   
     console.log(values)
   }
