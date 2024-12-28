@@ -1,7 +1,6 @@
-import exp from "constants";
 
 // Kullanıcı bilgileri
-interface User {
+export interface User {
   UserID: number;
   FullName: string;
   Email: string;

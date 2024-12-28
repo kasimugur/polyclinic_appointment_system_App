@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from 'next/link'
+import { useToast } from '@/hooks/use-toast'
+import { ToastAction } from '@/components/ui/toast'
 
 const formSchema = z.object({
   fullname: z.string().min(3, {
@@ -41,7 +43,6 @@ const formSchema = z.object({
 
 })
 export default function LoginPage() {
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,16 +53,23 @@ export default function LoginPage() {
     },
   })
 
+  const { toast } = useToast()
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await axios.post('/api/users', values);
-      console.log("Kayıt başarılı mesajı",response.data.message)
+      const response = await axios.post('/api/register', values);
+      console.log("Kayıt başarılı mesajı", response.data.message)
+      toast({
+        variant: 'successful',
+        title: `Sn. ${values.fullname} `,
+        description: "Kaydınız başarılı bir şekilde yapılmıştır .",
+        action: <ToastAction altText="Giriş Sayfası"><Link href={'/login'} >Giriş sayfası</Link></ToastAction>,
+      })
     } catch (error) {
-if (axios.isAxiosError(error)){
-  console.error('Kayıt hatası:', error.response?.data.error || error.message)
-} else {
-  console.error('kayıt katası', error)
-}
+      if (axios.isAxiosError(error)) {
+        console.error('Kayıt hatası:', error.response?.data.error || error.message)
+      } else {
+        console.error('kayıt katası', error)
+      }
     }
     console.log(values)
   }
@@ -104,7 +112,7 @@ if (axios.isAxiosError(error)){
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>şifre</FormLabel>
                       <FormControl>
                         <Input className='w-[518px]' type='password' placeholder="şifre" {...field} />
                       </FormControl>
@@ -117,14 +125,14 @@ if (axios.isAxiosError(error)){
                   name="role"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Role</FormLabel>
+                      <FormLabel>Rol</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <SelectTrigger className="w-[518px]">
                           <SelectValue placeholder="Role" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="patient">Hasta</SelectItem>
-                          <SelectItem value="doctor">Doktor</SelectItem>
+                          {/* <SelectItem value="doctor">Doktor</SelectItem> */}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -133,7 +141,6 @@ if (axios.isAxiosError(error)){
                 />
 
                 <div className='flex flex-col space-y-4'>
-
                   <Link href={'/login'} >
                     <Button className='w-[518px] bg-green-400 hover:bg-green-300'>Giriş</Button>
                   </Link>
@@ -149,6 +156,7 @@ if (axios.isAxiosError(error)){
           <Image className='w-full min-h-screen object-cover' src='/login.jpg' width={1080} height={1080} alt='loginİmage' />
         </div>
       </div>
+      
     </>
   )
 }
