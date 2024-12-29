@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -31,7 +31,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   
-  const {users} = useSiteContext()
+  const {users, setIsOpen,isOpen} = useSiteContext()
   const {toast} = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,6 +42,7 @@ export default function LoginPage() {
     },
   })
  
+
   
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const controlName = users.filter(user => user.Email === values.email).map(e =>  e.FullName)
@@ -53,7 +54,7 @@ export default function LoginPage() {
         title: `Sn. ${controlName} `,
         description: " Başarılı bir şekilde giriş yapılmıştır .",
       })
-      
+      setIsOpen(true)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Kayıt hatası:', error.response?.data.error || error.message)
@@ -62,7 +63,6 @@ export default function LoginPage() {
       }
     }
     console.log(values)
-
   }
   return (
     <>

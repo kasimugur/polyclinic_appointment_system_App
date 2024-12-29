@@ -54,7 +54,7 @@ export default function Hero() {
           </Tabs>
 
           <Button
-            onClick={() => router.push('/appointment')}
+            onClick={() => router.push('/myappointment')}
             className='bg-[#e7e7e7] text-gray-400 w-full  hover:bg-[#e7e7e7] mt-10 cursor-no-drop'>Tümünü göster</Button>
         </div>
       </div>

@@ -15,8 +15,16 @@ import {
 } from "@/components/ui/menubar"
 import { Bell, ChevronDown, CircleUser, LogOut, MessageSquare, Star, User } from 'lucide-react'
 import Link from 'next/link'
+import { useSiteContext } from '../context/SiteContext'
 
 export default function Profile() {
+  const { setIsOpen } = useSiteContext()
+  const {users} = useSiteContext()
+  
+  const handleClick = () => {
+    setIsOpen(false)
+  }
+  console.log(users.map(e => e.FullName))
   return (
     <Menubar className=''>
       <MenubarMenu>
@@ -41,7 +49,7 @@ export default function Profile() {
             Favorilerim<MenubarShortcut><Star size={20} /></MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
-          <MenubarItem>Çıkış <MenubarShortcut><LogOut size={20} /></MenubarShortcut></MenubarItem>
+          <MenubarItem onClick={handleClick}>Çıkış <MenubarShortcut><LogOut size={20} /></MenubarShortcut></MenubarItem>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>

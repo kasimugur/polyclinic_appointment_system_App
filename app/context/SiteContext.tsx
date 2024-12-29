@@ -7,11 +7,21 @@ import React, { createContext, useEffect, ReactNode, useState, useContext } from
 interface SiteContextProps {
   users: User[];
   setUsers?: React.Dispatch<React.SetStateAction<User[]>>;
-
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
 export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([])
+  const [isOpen, setIsOpen] = useState(() => {
+    const saved = sessionStorage.getItem('isOpen');
+    return saved ? JSON.parse(saved) : false; // JSON.parse ile boolean değeri alıyoruz
+  });
+  
+  // Durum değiştiğinde sessionStorage'a kaydediyoruz
+  useEffect(() => {
+    sessionStorage.setItem('isOpen', JSON.stringify(isOpen)); // JSON.stringify ile saklıyoruz
+  }, [isOpen]);
 
   const usersData = async () => {
     try {
@@ -32,8 +42,9 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   console.log(users)
   const data = {
-    users
-
+    users,
+    isOpen,
+    setIsOpen
   };
 
   return (
