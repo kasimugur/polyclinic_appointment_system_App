@@ -21,8 +21,8 @@ import { useRouter } from 'next/navigation'
 export default function Profile() {
   const router = useRouter()
   const { setIsOpen } = useSiteContext()
-  const { users, userEmail } = useSiteContext()
-  const userName = users.filter(e => e.Email === userEmail).map(name => name.FullName)
+  const { users, userId } = useSiteContext()
+  const userName = users.filter(e => e.UserID === userId).map(name => name.FullName)
 
   const handleClick = () => {
     setIsOpen(false)
@@ -37,7 +37,7 @@ export default function Profile() {
           <MenubarSub>
             <MenubarSubTrigger>Hesap Bilgileri </MenubarSubTrigger>
             <MenubarSubContent >
-              <MenubarItem><CircleUser className='size-5 mx-3' /> <Link href={'/personelInfo'}>Kişisel Bilgiler</Link></MenubarItem>
+              <MenubarItem><CircleUser className='size-5 mx-3' /> <Link className='w-full' href={'/personelInfo'}>Kişisel Bilgiler</Link></MenubarItem>
               {/* <MenubarSeparator />
               <MenubarItem><MessageSquare className='size-5 mx-3' /> İletişim Bilgileri</MenubarItem> */}
               <MenubarSeparator />

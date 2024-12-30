@@ -31,7 +31,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
 
-  const { users, setIsOpen,  setUserEmail } = useSiteContext()
+  const { users, setIsOpen } = useSiteContext()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,7 +67,6 @@ export default function LoginPage() {
         description: " Başarılı bir şekilde giriş yapılmıştır .",
       })
       setIsOpen(true)
-      setUserEmail(values.email);
       console.log(values.email)
     } catch (error) {
       if (axios.isAxiosError(error)) {
