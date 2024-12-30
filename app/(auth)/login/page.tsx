@@ -30,9 +30,9 @@ const formSchema = z.object({
 })
 
 export default function LoginPage() {
-  
-  const {users, setIsOpen,isOpen} = useSiteContext()
-  const {toast} = useToast()
+
+  const { users, setIsOpen,  setUserEmail } = useSiteContext()
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,13 +41,25 @@ export default function LoginPage() {
       password: "",
     },
   })
- 
 
-  
+
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const controlName = users.filter(user => user.Email === values.email).map(e =>  e.FullName)
+    const controlName = users.filter(user => user.Email === values.email).map(e => e.FullName)
+    if (!controlName.length) {
+      toast({
+        variant: 'destructive',
+        title: "Kullanıcı Bulunamadı",
+        description: "E-posta adresiniz sistemde kayıtlı değil.",
+      });
+      return;
+    }
+
     try {
       const response = await axios.post('/api/login', values);
+      const { token } = response.data;
+      console.log("tokennnnn", token)
+      sessionStorage.setItem('jwtToken', token);
       console.log("Kayıt mesaj: ", response.data.message)
       toast({
         variant: 'successful',
@@ -55,6 +67,8 @@ export default function LoginPage() {
         description: " Başarılı bir şekilde giriş yapılmıştır .",
       })
       setIsOpen(true)
+      setUserEmail(values.email);
+      console.log(values.email)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Kayıt hatası:', error.response?.data.error || error.message)

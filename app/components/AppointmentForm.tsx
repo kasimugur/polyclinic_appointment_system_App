@@ -7,7 +7,6 @@ import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import polikinlikdb from "@/constans"
 import {
   Form,
   FormControl,
@@ -18,14 +17,6 @@ import {
 } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-const dbPol = polikinlikdb.polikinlikdb
-const doctorsPol = dbPol.forEach(doctors => {
-  doctors.doctors.forEach(doctor => {
-  console.log(doctor)
-  })
-})
-console.log(dbPol)
-console.log(doctorsPol)
 const formSchema = z.object({
   county: z.string().min(3, {
     message: "İl must be at least 3 characters.",
