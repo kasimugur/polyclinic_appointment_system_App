@@ -16,19 +16,23 @@ import {
 import { Bell, ChevronDown, CircleUser, LogOut, MessageSquare, Star, User } from 'lucide-react'
 import Link from 'next/link'
 import { useSiteContext } from '../context/SiteContext'
+import { useRouter } from 'next/navigation'
 
 export default function Profile() {
+  const router = useRouter()
   const { setIsOpen } = useSiteContext()
-  const {users} = useSiteContext()
-  
+  const { users, userEmail } = useSiteContext()
+  const userName = users.filter(e => e.Email === userEmail).map(name => name.FullName)
+
   const handleClick = () => {
     setIsOpen(false)
+    router.push('/login')
+
   }
-  console.log(users.map(e => e.FullName))
   return (
     <Menubar className=''>
       <MenubarMenu>
-        <MenubarTrigger className='px-4 w-36 h-8'><User /> Kasımuğur <ChevronDown /> </MenubarTrigger>
+        <MenubarTrigger className='px-4 w-36 h-8'><User /> {userName} <ChevronDown /> </MenubarTrigger>
         <MenubarContent>
           <MenubarSub>
             <MenubarSubTrigger>Hesap Bilgileri </MenubarSubTrigger>
