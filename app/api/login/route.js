@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 import { query } from "../../../lib/db"
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
-
 const SECRET_KEY = process.env.SECRET_KEY;
 
 export async function POST(req) {
@@ -16,17 +15,20 @@ export async function POST(req) {
     }
 
     const user = users[0]
-
     const isPasswordValid = await bcrypt.compare(password, user.PasswordHash)
     if (!isPasswordValid) {
       return NextResponse.json({ error: 'Geçersiz şifre' }, { status: 401 });
     }
-    // JWT oluşturma
     const token = jwt.sign(
-      { email: user.Email , password: user.Password },
+      { 
+        email: user.Email, 
+        id: user.UserID
+      },
       SECRET_KEY,
-      { expiresIn: "1h" } // 1 saat geçerli
+      { expiresIn: "1h" } 
     );
+    
+
     return NextResponse.json({ message: 'Giriş başarılı', token });
   } catch (error) {
     console.error('Giriş hatası:', error);

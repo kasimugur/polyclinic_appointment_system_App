@@ -10,31 +10,37 @@ interface SiteContextProps {
   setUsers?: React.Dispatch<React.SetStateAction<User[]>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userEmail: string;
-  setUserEmail: React.Dispatch<React.SetStateAction<string>>;
+  userId: number;
+  setUserId: React.Dispatch<React.SetStateAction<number>>;
 }
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
 export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter()
   const [users, setUsers] = useState<User[]>([])
   const [isOpen, setIsOpen] = useState(() => {
-    const saved = sessionStorage.getItem('isOpen');
-    return saved ? JSON.parse(saved) : false;
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('isOpen');
+      return saved ? JSON.parse(saved) : false;
+    }
   });
-  const [userEmail, setUserEmail] = useState("")
+  const [userId, setUserId] = useState<number>(0)
   // const [userInfo, setUserInfo] = useState();
+
+
   const userJwtToken = () => {
     const token = sessionStorage.getItem('jwtToken');
     if (token) {
       try {
-        const decoded: JwtPayload & { email?: string } = jwtDecode(token);
+        const decoded: JwtPayload & { email?: string, id: number } = jwtDecode(token);
         const currentTime = Date.now() / 1000;
+
         if (decoded.exp) {
           if (decoded.exp < currentTime) {
             console.log("Token süresi dolmuş.");
             sessionStorage.removeItem('jwtToken');
           } else {
             console.log("Token geçerli:", decoded);
+            setUserId(decoded.id)
             // setUserInfo(decoded);
           }
         }
@@ -51,7 +57,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       router.push('/')
     } else {
       router.push('/login')
-      
+
     }
   }, [isOpen]);
 
@@ -76,8 +82,8 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     users,
     isOpen,
     setIsOpen,
-    setUserEmail,
-    userEmail
+    setUserId,
+    userId
   };
 
   return (
