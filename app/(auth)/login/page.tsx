@@ -19,6 +19,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useToast } from '@/hooks/use-toast'
 import { useSiteContext } from '@/app/context/SiteContext'
+import { jwtDecode, JwtPayload } from 'jwt-decode'
 
 const formSchema = z.object({
   email: z.string().email({
@@ -31,7 +32,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
 
-  const { users, setIsOpen } = useSiteContext()
+  const { users, setIsOpen, userId } = useSiteContext()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,8 +42,6 @@ export default function LoginPage() {
       password: "",
     },
   })
-
-
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const controlName = users.filter(user => user.Email === values.email).map(e => e.FullName)
@@ -67,6 +66,7 @@ export default function LoginPage() {
         description: " Başarılı bir şekilde giriş yapılmıştır .",
       })
       setIsOpen(true)
+      
       console.log(values.email)
     } catch (error) {
       if (axios.isAxiosError(error)) {

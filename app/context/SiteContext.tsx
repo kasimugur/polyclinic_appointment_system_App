@@ -1,5 +1,5 @@
 'use client'
-import { User } from '@/constans';
+import { myAppointment, User } from '@/constans';
 import axios from 'axios';
 import React, { createContext, useEffect, ReactNode, useState, useContext } from 'react';
 import { jwtDecode, JwtPayload } from "jwt-decode";
@@ -12,6 +12,8 @@ interface SiteContextProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   userId: number;
   setUserId: React.Dispatch<React.SetStateAction<number>>;
+  userAppointment?: myAppointment[];
+  setUserAppointment: React.Dispatch<React.SetStateAction<myAppointment[]>>
 }
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
 export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -24,8 +26,23 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     }
   });
   const [userId, setUserId] = useState<number>(0)
-  // const [userInfo, setUserInfo] = useState();
 
+const [userAppointment, setUserAppointment] = useState<myAppointment[]>([]) 
+console.log(userAppointment)
+async function fetchAppointments(userIdA:number) {
+  axios.get('/api/appointment', {
+    params: {
+      userId: userIdA, // Sorgu parametresi
+    },
+  })
+  .then(response => {
+    console.log('Randevu Bilgileri:', response.data);
+    setUserAppointment(response.data)
+  })
+  .catch(error => {
+    console.error('Hata:', error.response?.data || error.message);
+  });
+}
 
   const userJwtToken = () => {
     const token = sessionStorage.getItem('jwtToken');
@@ -41,6 +58,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
           } else {
             console.log("Token geçerli:", decoded);
             setUserId(decoded.id)
+            fetchAppointments(decoded.id)
             // setUserInfo(decoded);
           }
         }
@@ -50,17 +68,6 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       }
     }
   }
-
-  useEffect(() => {
-    sessionStorage.setItem('isOpen', JSON.stringify(isOpen));
-    if (isOpen) {
-      router.push('/')
-    } else {
-      router.push('/login')
-
-    }
-  }, [isOpen]);
-
   const usersData = async () => {
     try {
       const response = await axios.get('/api/users')
@@ -73,6 +80,18 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       }
     }
   }
+  
+  useEffect(() => {
+    sessionStorage.setItem('isOpen', JSON.stringify(isOpen));
+    if (isOpen) {
+      router.push('/')
+      
+    } else {
+      router.push('/login')
+    }
+  }, [isOpen]);
+
+  
   useEffect(() => {
     userJwtToken()
     usersData()

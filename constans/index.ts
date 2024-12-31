@@ -48,6 +48,14 @@ interface Appointment {
   Status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   CreatedAt: string; // 'YYYY-MM-DDTHH:mm:ss' şeklinde tarih zamanı
 }
+export interface myAppointment {
+  AppointmentDate: string
+  AppointmentID: number
+  AppointmentTime: string
+  DepartmentName: string
+  DoctorName: string
+  HospitalName: string
+}
 
 
 export interface PolikinlikdbType {
