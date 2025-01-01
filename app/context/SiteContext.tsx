@@ -12,10 +12,11 @@ interface SiteContextProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   userId: number;
   setUserId: React.Dispatch<React.SetStateAction<number>>;
-  userAppointment?: myAppointment[];
-  setUserAppointment: React.Dispatch<React.SetStateAction<myAppointment[]>>
+  userAppointment: myAppointment[];
+  // setUserAppointment: React.Dispatch<React.SetStateAction<myAppointment[]>>
 }
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
+
 export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter()
   const [users, setUsers] = useState<User[]>([])
@@ -24,25 +25,27 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       const saved = sessionStorage.getItem('isOpen');
       return saved ? JSON.parse(saved) : false;
     }
+    return false;
   });
-  const [userId, setUserId] = useState<number>(0)
+  const [userId, setUserId] = useState<number>()
 
-const [userAppointment, setUserAppointment] = useState<myAppointment[]>([]) 
-console.log(userAppointment)
-async function fetchAppointments(userIdA:number) {
-  axios.get('/api/appointment', {
-    params: {
-      userId: userIdA, // Sorgu parametresi
-    },
-  })
-  .then(response => {
-    console.log('Randevu Bilgileri:', response.data);
-    setUserAppointment(response.data)
-  })
-  .catch(error => {
-    console.error('Hata:', error.response?.data || error.message);
-  });
-}
+  const [userAppointment, setUserAppointment] = useState<myAppointment[]>([])
+  console.log(userAppointment)
+
+  async function fetchAppointments(userIdA: number) {
+    axios.get('/api/appointment', {
+      params: {
+        userId: userIdA, // Sorgu parametresi
+      },
+    })
+      .then(response => {
+        console.log('Randevu Bilgileri:', response.data);
+        setUserAppointment(response.data)
+      })
+      .catch(error => {
+        console.error('Hata:', error.response?.data || error.message);
+      });
+  }
 
   const userJwtToken = () => {
     const token = sessionStorage.getItem('jwtToken');
@@ -58,8 +61,8 @@ async function fetchAppointments(userIdA:number) {
           } else {
             console.log("Token geçerli:", decoded);
             setUserId(decoded.id)
+            console.log(userId)
             fetchAppointments(decoded.id)
-            // setUserInfo(decoded);
           }
         }
 
@@ -68,6 +71,7 @@ async function fetchAppointments(userIdA:number) {
       }
     }
   }
+
   const usersData = async () => {
     try {
       const response = await axios.get('/api/users')
@@ -80,20 +84,21 @@ async function fetchAppointments(userIdA:number) {
       }
     }
   }
-  
+
   useEffect(() => {
     sessionStorage.setItem('isOpen', JSON.stringify(isOpen));
     if (isOpen) {
       router.push('/')
-      
+      userJwtToken()
     } else {
       router.push('/login')
     }
+
   }, [isOpen]);
 
-  
+
   useEffect(() => {
-    userJwtToken()
+
     usersData()
   }, []);
 
@@ -102,7 +107,9 @@ async function fetchAppointments(userIdA:number) {
     isOpen,
     setIsOpen,
     setUserId,
-    userId
+    userId,
+    userAppointment,
+    setUserAppointment
   };
 
   return (
