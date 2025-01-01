@@ -55,6 +55,7 @@ export interface myAppointment {
   DepartmentName: string
   DoctorName: string
   HospitalName: string
+  Status:string
 }
 
 

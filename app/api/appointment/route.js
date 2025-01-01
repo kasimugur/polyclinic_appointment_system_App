@@ -17,7 +17,8 @@ export async function GET(req) {
         A.AppointmentTime,
         D.FullName AS DoctorName,
         DE.DepartmentName AS DepartmentName,
-        H.HospitalName AS HospitalName
+        H.HospitalName AS HospitalName,
+        Status
       FROM 
         Appointments A
       JOIN 

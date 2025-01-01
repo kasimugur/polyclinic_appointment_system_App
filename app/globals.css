@@ -24,7 +24,7 @@
     background-color: white; /* Kenarlık rengi */
 }
 .appointmentButton {
-  @apply border-x border-t px-4  rounded-t-lg rounded-b-none  transition   focus:border-b-0  !important;
+  @apply border-x border-t   rounded-t-lg rounded-b-none  transition   focus:border-b-0  px-4 py-2 !important;
 
 }
 
