@@ -10,11 +10,12 @@ interface SiteContextProps {
   setUsers?: React.Dispatch<React.SetStateAction<User[]>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userId: number;
-  setUserId: React.Dispatch<React.SetStateAction<number>>;
+  userId: number| undefined;
+  setUserId: React.Dispatch<React.SetStateAction<number|undefined>>;
   userAppointment: myAppointment[];
   // setUserAppointment: React.Dispatch<React.SetStateAction<myAppointment[]>>
 }
+
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
 
 export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -27,7 +28,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     }
     return false;
   });
-  const [userId, setUserId] = useState<number>()
+  const [userId, setUserId] = useState<number|undefined>(undefined)
 
   const [userAppointment, setUserAppointment] = useState<myAppointment[]>([])
   console.log(userAppointment)
@@ -35,7 +36,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
   async function fetchAppointments(userIdA: number) {
     axios.get('/api/appointment', {
       params: {
-        userId: userIdA, // Sorgu parametresi
+        userId: userIdA
       },
     })
       .then(response => {
@@ -46,6 +47,8 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
         console.error('Hata:', error.response?.data || error.message);
       });
   }
+
+
 
   const userJwtToken = () => {
     const token = sessionStorage.getItem('jwtToken');
@@ -109,7 +112,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     setUserId,
     userId,
     userAppointment,
-    setUserAppointment
+    setUserAppointment,
   };
 
   return (

@@ -69,7 +69,6 @@ export default function Hero() {
 
             </TabsList>
             <TabsContent className="overflow-y-scroll overflow-x-hidden flex flex-col justify-start items-center  " value="randevular">
-              {/**/}
               {userAppointment.length > 0 ? userAppointment.filter(item => item.Status.toLowerCase() === "aktif").map(item => <AppointmentCart key={item.AppointmentID} item={item} />) : <NoActiveAppointment children='Aktif' />}
 
 

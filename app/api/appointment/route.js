@@ -9,7 +9,6 @@ export async function GET(req) {
   }
 
   try {
-    // Veritabanı sorgusu
     const appointment = await query(`
       SELECT 
         A.AppointmentID,
@@ -35,5 +34,30 @@ export async function GET(req) {
   } catch (error) {
     console.error('Veritabanı hatası:', error);
     return NextResponse.json({ error: 'Randevular alınamadı' }, { status: 500 });
+  }
+}
+
+
+export async function POST(req) {
+  try {
+    const body = await req.json(); 
+    const { UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime, Status } = body;
+
+    // Eksik alanlar kontrolü
+    if (!UserID || !DoctorID || !HospitalId || !AppointmentDate || !AppointmentTime || !Status) {
+      return NextResponse.json({ error: 'Tüm alanlar gereklidir' }, { status: 400 });
+    }
+
+    // Veritabanına veri ekleme sorgusu
+    const result = await query(`
+      INSERT INTO Appointments 
+      (UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime, Status) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, [UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime, Status]);
+
+    return NextResponse.json({ message: 'Randevu başarıyla eklendi', appointmentId: result.insertId });
+  } catch (error) {
+    console.error('Veritabanı hatası:', error);
+    return NextResponse.json({ error: 'Randevu eklenemedi' }, { status: 500 });
   }
 }

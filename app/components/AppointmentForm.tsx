@@ -16,14 +16,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useAppointmentContext } from '../context/AppointmentContext'
 
 const formSchema = z.object({
   county: z.string().min(3, {
     message: "İl must be at least 3 characters.",
   }),
-  // district: z.enum(['patient', 'doctor', 'admin'], {
-  //   message: "please select a valid role."
-  // })
 
   district: z.string().min(3, {
     message: "İl must be at least 3 characters.",
@@ -39,7 +37,8 @@ const formSchema = z.object({
   }),
 })
 export default function AppointmentForm() {
-  
+  const { hospital, doctor, depart } = useAppointmentContext()
+
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,10 +50,19 @@ export default function AppointmentForm() {
       doctors: "",
     },
   })
-
+  console.log(hospital.filter(item => item.county))
   function onSubmit(values: z.infer<typeof formSchema>) {
+
     console.log(values)
   }
+  console.log("Seçilen hastane:", form.watch("hospitalname"));
+  console.log(
+    "Bulunan hospitalId:",
+    hospital.find((h) => h.hospitalName === form.watch("hospitalname"))?.hospitalId
+  );
+  console.log("Departmanlar:", depart);
+  console.log("Doktorlar:", doctor);
+
   return (
 
     <div className="bg-white p-2 transition duration-500">
@@ -68,13 +76,24 @@ export default function AppointmentForm() {
               <FormItem>
                 <FormLabel>İl</FormLabel>
                 <FormControl>
-                  <Select>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue("district", "");
+                      form.setValue("hospitalname", "");
+                      form.setValue("departments", "");
+                      form.setValue("doctors", "");
+                    }}
+                  >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Role" />
+                      <SelectValue placeholder="İl seçiniz" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="patient">Hasta</SelectItem>
-                      <SelectItem value="doctor">Doktor</SelectItem>
+                      {hospital.map((item) => (
+                        <SelectItem key={item.county} value={item.county}>
+                          {item.county}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -82,41 +101,33 @@ export default function AppointmentForm() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="district"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>İlçe:</FormLabel>
+                <FormLabel>İlçe</FormLabel>
                 <FormControl>
-                  <Select>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue("hospitalname", "");
+                      form.setValue("departments", "");
+                      form.setValue("doctors", "");
+                    }}
+                  >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Role" />
+                      <SelectValue placeholder="İlçe seçiniz" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="patient">Hasta</SelectItem>
-                      <SelectItem value="doctor">Doktor</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="departments"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Klinik</FormLabel>
-                <FormControl>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="patient">Hasta</SelectItem>
-                      <SelectItem value="doctor">Doktor</SelectItem>
+                      {hospital
+                        .filter((item) => item.county === form.watch("county"))
+                        .map((filteredItem) => (
+                          <SelectItem key={filteredItem.district} value={filteredItem.district}>
+                            {filteredItem.district}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -130,18 +141,28 @@ export default function AppointmentForm() {
             name="hospitalname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>hastane</FormLabel>
+                <FormLabel>Hastane</FormLabel>
                 <FormControl>
-                  <Select>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue("departments", "");
+                      form.setValue("doctors", "");
+                    }}
+                  >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Role" />
+                      <SelectValue placeholder="Hastane seçiniz" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="patient">Hasta</SelectItem>
-                      <SelectItem value="doctor">Doktor</SelectItem>
+                      {hospital
+                        .filter((item) => item.district === form.watch("district"))
+                        .map((filteredItem) => (
+                          <SelectItem key={filteredItem.hospitalId} value={filteredItem.hospitalName}>
+                            {filteredItem.hospitalName}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
-
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -149,18 +170,44 @@ export default function AppointmentForm() {
           />
           <FormField
             control={form.control}
-            name="doctors"
+            name="departments"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Hekim</FormLabel>
+                <FormLabel>Departman</FormLabel>
                 <FormControl>
-                  <Select>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue("doctors", ""); // Doktor seçim alanını temizle
+                    }}
+                  >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Role" />
+                      <SelectValue placeholder="Departman seçiniz" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="patient">Hasta</SelectItem>
-                      <SelectItem value="doctor">Doktor</SelectItem>
+                      {depart
+                        .filter((item) =>
+                          doctor.some((doc) => {
+                            // Hastane adını seçerek hospitalId'yi bul
+                            const selectedHospitalId = hospital.find(
+                              (h) => h.hospitalName === form.watch("hospitalname")
+                            )?.hospitalId;
+
+                            // Departman ve hastane eşleşmelerini kontrol et
+                            return (
+                              (doc.DepartmentID) === (item.DepartmentID) &&
+                              (doc.hospitalId) === (selectedHospitalId)
+                            );
+                          })
+                        )
+                        .map((filteredDepart) => (
+                          <SelectItem
+                            key={filteredDepart.DepartmentID}
+                            value={String(filteredDepart.DepartmentID)}
+                          >
+                            {filteredDepart.DepartmentName}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -168,7 +215,44 @@ export default function AppointmentForm() {
               </FormItem>
             )}
           />
-          <Button onClick={()=> router.push('/appointments')} type="submit">Submit</Button>
+
+
+          <FormField
+            control={form.control}
+            name="doctors"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Doktor</FormLabel>
+                <FormControl>
+                  <Select onValueChange={(value) => field.onChange(value)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Doktor seçiniz" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {doctor
+                        .filter(
+                          (doc) =>
+                            doc.hospitalId ===
+                            hospital.find((h) => h.hospitalName === form.watch("hospitalname"))?.hospitalId &&
+                            doc.DepartmentID === Number(form.watch("departments"))
+                        )
+                        .map((filteredDoc) => (
+                          <SelectItem key={filteredDoc.DoctorID} value={filteredDoc.FullName}>
+                            {filteredDoc.FullName}
+                          </SelectItem>
+                        ))}
+
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+
+
+          <Button onClick={() => router.push('/appointments')} type="submit">Submit</Button>
         </form>
       </Form>
     </div>
