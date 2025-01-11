@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { SiteContextProvider } from "./context/SiteContext";
+import { AppointmentContextProvider } from "./context/AppointmentContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,19 +28,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-polycgray `}
       >
         <SiteContextProvider>
-          <Header />
-          <div className="container px-5 min-h-screen">
-            {children}
-            <Toaster />
-          </div>
-          <Footer />
+          <AppointmentContextProvider>
+            <Header />
+            <div className="container px-5 min-h-screen">
+              {children}
+              <Toaster />
+            </div>
+            <Footer />
+          </AppointmentContextProvider>
         </SiteContextProvider>
       </body>
     </html>
