@@ -19,23 +19,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAppointmentContext } from '../context/AppointmentContext'
 
 const formSchema = z.object({
-  county: z.string().min(3, {
-    message: "İl must be at least 3 characters.",
+  county: z.string().min(1, {
+    message: "Lütfen il seçiniz.",
   }),
 
-  district: z.string().min(3, {
-    message: "İl must be at least 3 characters.",
+  district: z.string().min(1, {
+    message: "Lütfen ilçe seçiniz.",
   }),
-  departments: z.string().min(3, {
-    message: "İl must be at least 3 characters.",
+
+  departments: z.string().min(1, {
+    message: "Lütfen departman seçiniz.",
   }),
-  hospitalname: z.string().min(3, {
-    message: "İl must be at least 3 characters.",
+
+  hospitalname: z.string().min(1, {
+    message: "Lütfen hastane seçiniz.",
   }),
-  doctors: z.string().min(3, {
-    message: "İl must be at least 3 characters.",
+
+  doctors: z.string().min(1, {
+    message: "Lütfen doktor seçiniz.",
   }),
-})
+});
 export default function AppointmentForm() {
   const { hospital, doctor, depart } = useAppointmentContext()
 
@@ -45,23 +48,17 @@ export default function AppointmentForm() {
     defaultValues: {
       county: "",
       district: "",
-      departments: "",
       hospitalname: "",
+      departments: "",
       doctors: "",
     },
   })
-  console.log(hospital.filter(item => item.county))
-  function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("gönderilen bilgi", values)
   }
-  console.log("Seçilen hastane:", form.watch("hospitalname"));
-  console.log(
-    "Bulunan hospitalId:",
-    hospital.find((h) => h.hospitalName === form.watch("hospitalname"))?.hospitalId
-  );
-  console.log("Departmanlar:", depart);
-  console.log("Doktorlar:", doctor);
+
+
 
   return (
 
@@ -157,7 +154,7 @@ export default function AppointmentForm() {
                       {hospital
                         .filter((item) => item.district === form.watch("district"))
                         .map((filteredItem) => (
-                          <SelectItem key={filteredItem.hospitalId} value={filteredItem.hospitalName}>
+                          <SelectItem key={filteredItem.hospitalId} value={String(filteredItem.hospitalId)}>
                             {filteredItem.hospitalName}
                           </SelectItem>
                         ))}
@@ -168,6 +165,7 @@ export default function AppointmentForm() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="departments"
@@ -178,36 +176,25 @@ export default function AppointmentForm() {
                   <Select
                     onValueChange={(value) => {
                       field.onChange(value);
-                      form.setValue("doctors", ""); // Doktor seçim alanını temizle
+                      form.setValue("doctors", "");
                     }}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Departman seçiniz" />
                     </SelectTrigger>
                     <SelectContent>
-                      {depart
-                        .filter((item) =>
-                          doctor.some((doc) => {
-                            // Hastane adını seçerek hospitalId'yi bul
-                            const selectedHospitalId = hospital.find(
-                              (h) => h.hospitalName === form.watch("hospitalname")
-                            )?.hospitalId;
-
-                            // Departman ve hastane eşleşmelerini kontrol et
-                            return (
-                              (doc.DepartmentID) === (item.DepartmentID) &&
-                              (doc.hospitalId) === (selectedHospitalId)
-                            );
-                          })
-                        )
-                        .map((filteredDepart) => (
-                          <SelectItem
-                            key={filteredDepart.DepartmentID}
-                            value={String(filteredDepart.DepartmentID)}
-                          >
-                            {filteredDepart.DepartmentName}
-                          </SelectItem>
-                        ))}
+                      {doctor
+                        .filter(doc => String(doc.HospitalId) === (form.watch("hospitalname"))) // Seçilen hastaneye ait doktorları filtrele
+                        .map(doc => doc.DepartmentID) // Departman ID'lerini al
+                        .filter((value, index, self) => self.indexOf(value) === index) // Tekrar edenleri kaldır
+                        .map((departmentId) => {
+                          const department = depart.find(dep => dep.DepartmentID === departmentId); // Departman bilgilerini bul
+                          return (
+                            <SelectItem key={departmentId} value={String(departmentId)}>
+                              {department?.DepartmentName}
+                            </SelectItem>
+                          );
+                        })}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -215,8 +202,6 @@ export default function AppointmentForm() {
               </FormItem>
             )}
           />
-
-
           <FormField
             control={form.control}
             name="doctors"
@@ -224,24 +209,21 @@ export default function AppointmentForm() {
               <FormItem>
                 <FormLabel>Doktor</FormLabel>
                 <FormControl>
-                  <Select onValueChange={(value) => field.onChange(value)}>
+                  <Select onValueChange={field.onChange}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Doktor seçiniz" />
                     </SelectTrigger>
                     <SelectContent>
                       {doctor
-                        .filter(
-                          (doc) =>
-                            doc.hospitalId ===
-                            hospital.find((h) => h.hospitalName === form.watch("hospitalname"))?.hospitalId &&
-                            doc.DepartmentID === Number(form.watch("departments"))
+                        .filter(doc =>
+                          doc.HospitalId === Number(form.watch("hospitalname")) &&
+                          doc.DepartmentID === Number(form.watch("departments"))
                         )
-                        .map((filteredDoc) => (
-                          <SelectItem key={filteredDoc.DoctorID} value={filteredDoc.FullName}>
-                            {filteredDoc.FullName}
+                        .map((filteredDoctor) => (
+                          <SelectItem key={filteredDoctor.DoctorID} value={filteredDoctor.FullName}>
+                            {filteredDoctor.FullName}
                           </SelectItem>
                         ))}
-
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -249,8 +231,6 @@ export default function AppointmentForm() {
               </FormItem>
             )}
           />
-
-
 
           <Button onClick={() => router.push('/appointments')} type="submit">Submit</Button>
         </form>

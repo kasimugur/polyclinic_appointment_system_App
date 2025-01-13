@@ -32,7 +32,7 @@ export interface Doctor {
   FullName: string;
   DepartmentID: number;
   Contact?: string;
-  hospitalId: number;
+  HospitalId: number;
   CreatedAt: string;
 }
 
