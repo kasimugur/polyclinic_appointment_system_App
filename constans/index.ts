@@ -37,7 +37,7 @@ export interface Doctor {
 }
 
 // Randevu bilgileri
- interface Appointment {
+interface Appointment {
   AppointmentID: number;
   UserID: number;
   DoctorID: number;
@@ -56,9 +56,15 @@ export interface myAppointment {
   DepartmentName: string
   DoctorName: string
   HospitalName: string
-  Status:string
+  Status: string
 }
-
+export interface ValuesData {
+  county: string;
+  district: string;
+  departments: string;
+  hospitalname: string;
+  doctors: string;
+}
 
 export interface PolikinlikdbType {
   users: User[];

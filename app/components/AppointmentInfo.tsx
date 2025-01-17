@@ -14,22 +14,22 @@ import {
 import { Info } from 'lucide-react'
 import AppointmentConfirm from './AppointmentConfirm'
 
-interface AppointmentInfoPage {
-  time: string
+interface AppointmentInfoPageProps {
+  time: string;
+  date: string;
+  openTime: boolean;
+  setOpenTime: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function AppointmentInfo({ time }: AppointmentInfoPage) {
+export default function AppointmentInfo({ time, date, openTime, setOpenTime }: AppointmentInfoPageProps) {
   const [open, setOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const handleClick = (time: string) => {
-
-    return <AppointmentConfirm setConfirmOpen={setConfirmOpen} confirmOpen={confirmOpen} time={time} />
-  }
-console.log(confirmOpen)
-console.log(open)
+  
+  console.log(confirmOpen)
+  console.log("open dialog", open)
   return (
     <>
-      <AlertDialog open={open} onOpenChange={setOpen} >
+      <AlertDialog open={openTime} onOpenChange={setOpenTime} >
         <AlertDialogTrigger>{time}</AlertDialogTrigger>
         <AlertDialogContent className='w-96'>
           <AlertDialogHeader >
@@ -39,22 +39,20 @@ console.log(open)
               Kaydet tuşuna bastığınızda,
               randevunuz otomatik olarak onaylanmış olacak.
               Eğer gelemeyecekseniz, randevunuzu
-              en geç 24.12.2024 saat 20:00’ye kadar
+              en geç {date} saat 06:00’ye kadar
               iptal etmelisiniz .
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel >Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={() => {
-              setOpen(false)
+              setOpenTime(false)
               setConfirmOpen(true)
-              // handleClick(time)
             }} className='bg-polycbtn hover:bg-polycbtnhover'> Ok  </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      {confirmOpen && handleClick(time)}
+      <AppointmentConfirm setConfirmOpen={setConfirmOpen} date={date} confirmOpen={confirmOpen} time={time} />
     </>
   )
 }
