@@ -1,5 +1,5 @@
 'use client'
-import { Department, Doctor, Hospital } from '@/constans'
+import { Department, Doctor, Hospital, ValuesData } from '@/constans'
 import axios from 'axios'
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
@@ -7,6 +7,9 @@ interface AppointmentContextProps {
   hospital: Hospital[];
   doctor: Doctor[];
   depart: Department[];
+  sentData: ValuesData[];
+  setSentData: React.Dispatch<React.SetStateAction<ValuesData[]>>;
+
 }
 
 const AppointmentContext = createContext<AppointmentContextProps | undefined>(undefined)
@@ -15,6 +18,7 @@ export const AppointmentContextProvider: React.FC<{ children: ReactNode }> = ({ 
   const [hospital, setHospital] = useState<Hospital[]>([])
   const [doctor, setDoctor] = useState<Doctor[]>([])
   const [depart, setDepart] = useState<Department[]>([])
+  const [sentData, setSentData] = useState<ValuesData[]>([])
   const hospitals = async () => {
     try {
       const response = await axios.get('/api/hospital')
@@ -45,6 +49,7 @@ export const AppointmentContextProvider: React.FC<{ children: ReactNode }> = ({ 
     }
   }
 
+  console.log("gönderilern sent data ", sentData)
   useEffect(() => {
     hospitals()
     departments()
@@ -54,7 +59,9 @@ export const AppointmentContextProvider: React.FC<{ children: ReactNode }> = ({ 
   const data = {
     hospital,
     doctor,
-    depart
+    depart,
+    sentData,
+    setSentData
   }
   return (
     <AppointmentContext.Provider value={data}>

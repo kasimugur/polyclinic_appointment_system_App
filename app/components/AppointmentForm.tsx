@@ -40,7 +40,7 @@ const formSchema = z.object({
   }),
 });
 export default function AppointmentForm() {
-  const { hospital, doctor, depart } = useAppointmentContext()
+  const { hospital, doctor, depart, setSentData } = useAppointmentContext()
 
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,8 +54,12 @@ export default function AppointmentForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("gönderilen bilgi", values)
+    // await setSentData(values)
+    setSentData([])
+    await setSentData(prevData => [...prevData, values]);
+    router.push('/appointments')
   }
 
 
@@ -232,7 +236,7 @@ export default function AppointmentForm() {
             )}
           />
 
-          <Button onClick={() => router.push('/appointments')} type="submit">Submit</Button>
+          <Button type="submit">Submit</Button>
         </form>
       </Form>
     </div>

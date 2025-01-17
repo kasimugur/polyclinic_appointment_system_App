@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import {
   Dialog,
@@ -19,14 +20,16 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from '@/components/ui/button'
+import { useAppointmentContext } from '../context/AppointmentContext'
 
 interface AppointmentConfirmPage {
   time: string
   confirmOpen: boolean
   setConfirmOpen: React.Dispatch<React.SetStateAction<boolean>>
+  date: string;
 }
-export default function AppointmentConfirm({ time, confirmOpen, setConfirmOpen }: AppointmentConfirmPage) {
-
+export default function AppointmentConfirm({ time, date, confirmOpen, setConfirmOpen }: AppointmentConfirmPage) {
+  const { sentData } = useAppointmentContext()
   return (
     <Dialog onOpenChange={setConfirmOpen} open={confirmOpen}>
       <DialogContent className=" sm:max-w-[518px] ">
@@ -43,7 +46,7 @@ export default function AppointmentConfirm({ time, confirmOpen, setConfirmOpen }
             <div className="h-14 px-4 py-1 font-medium">Randevu Sahibi</div>
           </div>
           <div className="flex-1">
-            <div className="h-14 px-4 py-1 border-b">09.01.2025 11:10</div>
+            <div className="h-14 px-4 py-1 border-b">{date} {time} </div>
             <div className="h-14 px-4 py-1 border-b text-red-600">Muayene</div>
             <div className="h-14 px-4 py-1 border-b">KARAMAN EĞİTİM VE ARAŞTIRMA HASTANESİ</div>
             <div className="h-14 px-4 py-1 border-b">İç Hastalıkları (Dahiliye)</div>
