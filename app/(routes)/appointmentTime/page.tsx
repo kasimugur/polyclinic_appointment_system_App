@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ArrowLeft, Star } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Accordion,
   AccordionContent,
@@ -19,18 +19,9 @@ export default function AppointmentTime() {
   const [openTime, setOpenTime] = useState(false)
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
-  const getNextTenDays = () => {
-    const today = new Date();
-    const dates = [];
-    for (let i = 0; i < 10; i++) {
-      const nextDate = new Date(today);
-      nextDate.setDate(today.getDate() + i);
-      dates.push(nextDate.toLocaleDateString('tr-TR')); // Türkçe formatta tarih
-    }
-    return dates;
-  };
+  const [dates, setDates] = useState<string[]>([]) // Başlangıç değeri boş bir dizi, türü string[] olarak belirtiyoruz
 
-  const dates = getNextTenDays()
+
   const times = [
     ['08:00', '08:10', '08:20', '08:30', '08:40', '08:50'],
     ['09:00', '09:10', '09:20', '09:30', '09:40', '09:50'],
@@ -44,6 +35,29 @@ export default function AppointmentTime() {
     setSelectedDate(date);
     setOpenTime(true)
   }
+
+  useEffect(() => {
+    const getNextTenDays = () => {
+      const today = new Date();
+      const datesArray = [];
+      for (let i = 0; i < 10; i++) {
+        const nextDate = new Date(today);
+        nextDate.setDate(today.getDate() + i);
+        
+        // Tarih ve gün bilgisini al
+        const formattedDate = nextDate.toLocaleDateString('tr-TR');
+        const dayName = nextDate.toLocaleString('tr-TR', { weekday: 'long' });
+        
+        // Gün ve tarihi birleştir
+        datesArray.push(`${formattedDate} - ${dayName}`);
+      }
+      return datesArray;
+    };
+
+    const nextTenDays = getNextTenDays();
+    setDates(nextTenDays);
+    console.log("tarih useEffect", nextTenDays);
+  }, []);
   return (
     <>
       <div className='py-3 m-4 rounded-xl p-2 min-h-72 bg-white w-full border-b'>

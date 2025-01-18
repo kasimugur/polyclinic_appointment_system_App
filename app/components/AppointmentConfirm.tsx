@@ -21,6 +21,7 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { useAppointmentContext } from '../context/AppointmentContext'
+import { useSiteContext } from '../context/SiteContext'
 
 interface AppointmentConfirmPage {
   time: string
@@ -29,7 +30,14 @@ interface AppointmentConfirmPage {
   date: string;
 }
 export default function AppointmentConfirm({ time, date, confirmOpen, setConfirmOpen }: AppointmentConfirmPage) {
-  const { sentData } = useAppointmentContext()
+  const { sentData, depart,hospital } = useAppointmentContext()
+  const {users, userId} = useSiteContext()
+  const userName = users.filter(name => name.UserID === userId).map(i=> i.FullName)
+  const hospitalUserName = hospital.filter(item => item.hospitalId === Number(sentData.map(i=> i.hospitalname))).map(i=> i.hospitalName)
+  const doctorUserName = sentData.map(i=> i.doctors)
+  const departUserName = depart.filter(item => item.DepartmentID === Number(sentData.map(i=> i.departments))).map(i=> i.DepartmentName)
+
+  console.log()
   return (
     <Dialog onOpenChange={setConfirmOpen} open={confirmOpen}>
       <DialogContent className=" sm:max-w-[518px] ">
@@ -48,10 +56,10 @@ export default function AppointmentConfirm({ time, date, confirmOpen, setConfirm
           <div className="flex-1">
             <div className="h-14 px-4 py-1 border-b">{date} {time} </div>
             <div className="h-14 px-4 py-1 border-b text-red-600">Muayene</div>
-            <div className="h-14 px-4 py-1 border-b">KARAMAN EĞİTİM VE ARAŞTIRMA HASTANESİ</div>
-            <div className="h-14 px-4 py-1 border-b">İç Hastalıkları (Dahiliye)</div>
-            <div className="h-14 px-4 py-1 border-b">İSMAİL CEM YEŞİLOVA</div>
-            <div className="h-14 px-4 py-1">KASIM UĞUR</div>
+            <div className="h-14 px-4 py-1 border-b">{hospitalUserName} </div>
+            <div className="h-14 px-4 py-1 border-b">{departUserName} </div>
+            <div className="h-14 px-4 py-1 border-b">{doctorUserName} </div>
+            <div className="h-14 px-4 py-1">{userName} </div>
           </div>
         </div>
         <DialogFooter>
