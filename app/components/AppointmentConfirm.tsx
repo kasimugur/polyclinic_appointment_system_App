@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { useAppointmentContext } from '../context/AppointmentContext'
 import { useSiteContext } from '../context/SiteContext'
+import axios from 'axios'
+import { ToastAction } from '@/components/ui/toast'
+import Link from 'next/link'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 interface AppointmentConfirmPage {
   time: string
@@ -30,14 +35,54 @@ interface AppointmentConfirmPage {
   date: string;
 }
 export default function AppointmentConfirm({ time, date, confirmOpen, setConfirmOpen }: AppointmentConfirmPage) {
-  const { sentData, depart,hospital } = useAppointmentContext()
-  const {users, userId} = useSiteContext()
-  const userName = users.filter(name => name.UserID === userId).map(i=> i.FullName)
-  const hospitalUserName = hospital.filter(item => item.hospitalId === Number(sentData.map(i=> i.hospitalname))).map(i=> i.hospitalName)
-  const doctorUserName = sentData.map(i=> i.doctors)
-  const departUserName = depart.filter(item => item.DepartmentID === Number(sentData.map(i=> i.departments))).map(i=> i.DepartmentName)
+  const router = useRouter()
+  const { sentData, depart, hospital, doctor } = useAppointmentContext()
+  const { users, userId } = useSiteContext()
+  const userName = users.filter(name => name.UserID === userId).map(i => i.FullName)
+  const hospitalUserName = hospital.filter(item => item.hospitalId === Number(sentData.map(i => i.hospitalname))).map(i => i.hospitalName)
+  const doctorUserName = sentData.map(i => i.doctors)
+  const departUserName = depart.filter(item => item.DepartmentID === Number(sentData.map(i => i.departments))).map(i => i.DepartmentName)
+  // gönderilen bilgiler alma
+  const doctorID = doctor.filter(item => item.FullName === String(sentData.map(i => i.doctors))).map(item => item.DoctorID)
+  const departId = depart.filter(item => item.DepartmentID === Number(sentData.map(i => i.departments))).map(item => item.DepartmentID)
+  const hospitalId = hospital.filter(item => item.hospitalId === Number(sentData.map(i => i.hospitalname))).map(item => item.hospitalId)
+  const [datePart] = date.split(' - ');
+  const [day, month, year] = datePart.split('.');
+  const formattedDate = `${year}-${month}-${day}`;
+  const { toast } = useToast()
+  const handleClick = async () => {
+    const appointmentData = {
+      UserID: userId,
+      DoctorID: doctorID[0],
+      DepartmentID: departId[0],
+      HospitalId: hospitalId[0],
+      AppointmentDate: formattedDate, // YYYY-MM-DD formatında
+      AppointmentTime: `${time}:00`, // HH:MM:SS formatında
+    };
+    console.log("gönderile appointmentData",appointmentData)
+    try {
+      const response = await axios.post('/api/appointment', appointmentData);
+      console.log('Randevu bilgileri:', response.data); // API'den dönen veriyi konsola yazdır
+      toast({
+        variant: 'successful',
+        title: `Sn. ${userName} `,
+        description: "Randevunuz başarılı bir şekilde alınmıştır .",
+      })
+      router.push('/')
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: `Sn. ${userName} `,
+        description: "Randevunuz alınamamıştır lütfen tekrar deneyin."
+      })
+      if (axios.isAxiosError(error)) {
+        console.error('randevu gönderilmedi hatası:', error.response?.data.error || error.message)
+      } else {
+        console.error('randevu alma hatası ', error)
+      }
+    }
+  }
 
-  console.log()
   return (
     <Dialog onOpenChange={setConfirmOpen} open={confirmOpen}>
       <DialogContent className=" sm:max-w-[518px] ">
@@ -63,7 +108,7 @@ export default function AppointmentConfirm({ time, date, confirmOpen, setConfirm
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => setConfirmOpen(false)} className='bg-polycbtn text-white' type="submit">Randevu Onayla</Button>
+          <Button onClick={() => handleClick()} className='bg-polycbtn text-white' type="submit">Randevu Onayla</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

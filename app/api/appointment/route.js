@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query } from '../../../lib/db'; 
+import { query } from '../../../lib/db';
 
 export async function GET(req) {
   const userId = req.nextUrl.searchParams.get('userId');
@@ -40,20 +40,21 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const body = await req.json(); 
-    const { UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime, Status } = body;
+    const body = await req.json();
+    const { UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime } = body;
 
     // Eksik alanlar kontrolü
-    if (!UserID || !DoctorID || !HospitalId || !AppointmentDate || !AppointmentTime || !Status) {
+    if (!UserID || !DoctorID || !DepartmentID || !HospitalId || !AppointmentDate || !AppointmentTime) {
+      console.log('Eksik alanlar:', { UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime });
       return NextResponse.json({ error: 'Tüm alanlar gereklidir' }, { status: 400 });
     }
 
     // Veritabanına veri ekleme sorgusu
     const result = await query(`
       INSERT INTO Appointments 
-      (UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime, Status) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime, Status]);
+      (UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime) 
+      VALUES (?, ?, ?, ?, ?, ?)
+    `, [UserID, DoctorID, DepartmentID, HospitalId, AppointmentDate, AppointmentTime]);
 
     return NextResponse.json({ message: 'Randevu başarıyla eklendi', appointmentId: result.insertId });
   } catch (error) {
