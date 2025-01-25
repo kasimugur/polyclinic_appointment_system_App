@@ -48,8 +48,6 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       });
   }
 
-
-
   const userJwtToken = () => {
     const token = sessionStorage.getItem('jwtToken');
     if (token) {
