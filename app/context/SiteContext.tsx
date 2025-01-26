@@ -4,16 +4,17 @@ import axios from 'axios';
 import React, { createContext, useEffect, ReactNode, useState, useContext } from 'react';
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 interface SiteContextProps {
   users: User[];
   setUsers?: React.Dispatch<React.SetStateAction<User[]>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userId: number| undefined;
-  setUserId: React.Dispatch<React.SetStateAction<number|undefined>>;
+  userId: number | undefined;
+  setUserId: React.Dispatch<React.SetStateAction<number | undefined>>;
   userAppointment: myAppointment[];
-  // setUserAppointment: React.Dispatch<React.SetStateAction<myAppointment[]>>
+  cancelAppointment: (appointmentId: number) => Promise<void>
 }
 
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
@@ -28,11 +29,9 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     }
     return false;
   });
-  const [userId, setUserId] = useState<number|undefined>(undefined)
-
+  const [userId, setUserId] = useState<number | undefined>(undefined)
   const [userAppointment, setUserAppointment] = useState<myAppointment[]>([])
-  console.log(userAppointment)
-
+  
   async function fetchAppointments(userIdA: number) {
     axios.get('/api/appointment', {
       params: {
@@ -98,6 +97,16 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [isOpen]);
 
 
+  const cancelAppointment = async (appointmentId: number) => {
+    try {
+      const response = await axios.post('/api/appointmentcancel/', { appointmentId });
+      console.log(response.data.message); // İptal mesajını yazdır
+      
+    } catch (error) {
+      console.error('Randevu iptal edilemedi:', (error as Error).message);
+    }
+  };
+
   useEffect(() => {
 
     usersData()
@@ -111,6 +120,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     userId,
     userAppointment,
     setUserAppointment,
+    cancelAppointment
   };
 
   return (
