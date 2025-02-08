@@ -99,16 +99,14 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const cancelAppointment = async (appointmentId: number) => {
     try {
-      const response = await axios.post('/api/appointmentcancel/', { appointmentId });
+      const response = await axios.put('/api/appointmentcancel/', { appointmentId });
       console.log(response.data.message); // İptal mesajını yazdır
-      
     } catch (error) {
       console.error('Randevu iptal edilemedi:', (error as Error).message);
     }
   };
 
   useEffect(() => {
-
     usersData()
   }, []);
 

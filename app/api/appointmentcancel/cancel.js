@@ -1,8 +1,8 @@
-export async function POST(req) {
+export async function PUT(req) {
   try {
     const body = await req.json();
     const { appointmentId } = body; // İptal edilecek randevu ID'si
-
+console.log("server tarafı appointmentId",appointmentId)
     // Randevu ID kontrolü
     if (!appointmentId) {
       return NextResponse.json({ error: 'Randevu ID gerekli' }, { status: 400 });
