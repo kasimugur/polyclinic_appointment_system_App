@@ -7,27 +7,28 @@ import axios from 'axios'
 
 const AppointmentCart: React.FC<{ item: myAppointment }> = ({ item }) => {
   const { toast } = useToast()
-  const cancelAppointment = async (appointmentId:number) => {
+  const cancelAppointment = async (appointmentId: number) => {
     console.log("appointment id number mi değil mi", appointmentId)
-    try {
-      const response = await axios.put('/api/appointment', {
-        appointmentId, // İptal edilecek randevu ID'si
-      });
-      toast({
-        variant: 'successful',
-        title: "randevu iptali",
-        description: "Randevunuz başarılı bir şekilde  iptal edildi.",
-      });
-      console.log(response.data.message); // İptal mesajını yazdır
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: "randevu iptali",
-        description: "Randevunuz iptal edilemedi tekrar deneyiniz.",
-      });
-      console.error('Randevu iptal edilemedi:', error);
-      // Hata durumunda kullanıcıya bir bildirim gösterebilirsiniz
-    }
+    if (item.Status === "Aktif") {
+      try {
+        const response = await axios.put('/api/appointment', {
+          appointmentId, // İptal edilecek randevu ID'si
+        });
+        toast({
+          variant: 'successful',
+          title: "randevu iptali",
+          description: "Randevunuz başarılı bir şekilde  iptal edildi.",
+        });
+        console.log(response.data.message); // İptal mesajını yazdır
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: "randevu iptali",
+          description: "Randevunuz iptal edilemedi tekrar deneyiniz.",
+        });
+        console.error('Randevu iptal edilemedi:', error);
+      }
+    } 
   };
   return (
     <div className='py-3 flex m-4  w-full border-b'>
@@ -39,7 +40,7 @@ const AppointmentCart: React.FC<{ item: myAppointment }> = ({ item }) => {
             <label className={`text-xs font-bold 
             ${item.Status.toLowerCase() === 'iptal edildi' && 'text-[#ff3300]'}
             ${item.Status.toLowerCase() === 'geçmiş' && 'text-[#d40d12]'}
-              ${item.Status.toLowerCase() === 'aktif' && 'text-[#65ac18]'}  `}> {item.Status} Randevu </label>
+              ${item.Status.toLowerCase() === 'aktif' && 'text-[#65ac18]'}  `}>Randevu {item.Status}  </label>
           </div>
           <div className="flex gap-3 items-center ">
             <Tag size={12} />
@@ -67,18 +68,16 @@ const AppointmentCart: React.FC<{ item: myAppointment }> = ({ item }) => {
           {item.Status.toLowerCase() === 'aktif' && <CircleX />}
           {item.Status.toLowerCase() === 'geçmiş' && <CirclePlus />}
         </Button> */}
-        <Button
+        { item.Status === "Aktif" && <Button
           onClick={() => cancelAppointment(item.AppointmentID)}
-          className={`px-6 mt-3
-    ${item.Status.toLowerCase() === 'aktif' ? 'bg-[#d40d12]' : 'bg-gray-400'} // Geçmiş için gri
+          className={`px-6 mt-3 bg-[#d40d12]
   `}
           variant={'default'}
           size={'icon'}
-          disabled={item.Status.toLowerCase() === 'geçmiş'} // Geçmiş randevular için butonu devre dışı bırak
         >
-          {item.Status.toLowerCase() === 'aktif' && <CircleX />}
-          {item.Status.toLowerCase() === 'geçmiş' && <CirclePlus />}
-        </Button>
+          {item.Status === 'Aktif' && <CircleX />}
+          {/* {item.Status === 'Geçmiş' && <CirclePlus />} */}
+        </Button>}
       </div>
     </div>
   )
