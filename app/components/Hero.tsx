@@ -14,11 +14,12 @@ export default function Hero() {
   const [active, setActive] = useState('yesMeeting')
   const router = useRouter()
 
-  const filteredAppointments = userAppointment.filter(item => 
-    item.Status.toLowerCase() === "geçmiş" || 
-    item.Status.toLowerCase() === "iptal edildi"
-);
-
+  const filteredAppointments = userAppointment.filter(item =>
+    item.Status === "Geçmiş" ||
+    item.Status === "İptal Edildi"
+  );
+  
+console.log(filteredAppointments)
   return (
     <div className="p-[25]  ">
       <div className=" flex p-4 rounded-md bg-white  space-x-6">
