@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useSiteContext } from '../context/SiteContext'
 
 export default function Header() {
-  const { isOpen } = useSiteContext()
+  const { isOpen  } = useSiteContext()
   return (
     <>
       {isOpen && <div className='px-5 h-14 pt-2 shadow-sm shadow-gray-100   bg-white flex sticky top-0 items-center justify-around '>
