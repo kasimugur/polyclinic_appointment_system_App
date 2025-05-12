@@ -132,6 +132,7 @@ export default function RegisterPage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="patient">Hasta</SelectItem>
+                          {/* <SelectItem value="admin">admin</SelectItem> */}
                           {/* <SelectItem value="doctor">Doktor</SelectItem> */}
                         </SelectContent>
                       </Select>

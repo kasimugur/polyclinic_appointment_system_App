@@ -28,7 +28,7 @@ const AppointmentCart: React.FC<{ item: myAppointment }> = ({ item }) => {
         });
         console.error('Randevu iptal edilemedi:', error);
       }
-    } 
+    }
   };
   return (
     <div className='py-3 flex m-4  w-full border-b'>
@@ -68,10 +68,9 @@ const AppointmentCart: React.FC<{ item: myAppointment }> = ({ item }) => {
           {item.Status.toLowerCase() === 'aktif' && <CircleX />}
           {item.Status.toLowerCase() === 'geçmiş' && <CirclePlus />}
         </Button> */}
-        { item.Status === "Aktif" && <Button
+        {item.Status === "Aktif" && <Button
           onClick={() => cancelAppointment(item.AppointmentID)}
-          className={`px-6 mt-3 bg-[#d40d12]
-  `}
+          className={`px-6 mt-3 bg-[#d40d12]`}
           variant={'default'}
           size={'icon'}
         >

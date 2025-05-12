@@ -14,7 +14,9 @@ interface SiteContextProps {
   userId: number | undefined;
   setUserId: React.Dispatch<React.SetStateAction<number | undefined>>;
   userAppointment: myAppointment[];
-  cancelAppointment: (appointmentId: number) => Promise<void>
+  cancelAppointment: (appointmentId: number) => Promise<void>;
+  openDash: boolean;
+  setOpenDash: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const SiteContext = createContext<SiteContextProps | undefined>(undefined);
@@ -31,7 +33,13 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
   });
   const [userId, setUserId] = useState<number | undefined>(undefined)
   const [userAppointment, setUserAppointment] = useState<myAppointment[]>([])
-  
+  const [openDash,setOpenDash] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('isOpen');
+      return saved ? JSON.parse(saved) : false;
+    }
+    return false;
+  })
   async function fetchAppointments(userIdA: number) {
     axios.get('/api/appointment', {
       params: {
@@ -84,7 +92,7 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       }
     }
   }
-
+console.log(users)
   useEffect(() => {
     sessionStorage.setItem('isOpen', JSON.stringify(isOpen));
     if (isOpen) {
@@ -93,8 +101,17 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     } else {
       router.push('/login')
     }
-
   }, [isOpen]);
+
+  useEffect(() => {
+    sessionStorage.setItem('openDash', JSON.stringify(openDash));
+    if (openDash) {
+      router.push('/')
+      userJwtToken()
+    } else {
+      router.push('/admin/login')
+    }
+  }, [openDash]);
 
 
   const cancelAppointment = async (appointmentId: number) => {
@@ -118,7 +135,9 @@ export const SiteContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     userId,
     userAppointment,
     setUserAppointment,
-    cancelAppointment
+    cancelAppointment,
+    setOpenDash,
+    openDash
   };
 
   return (

@@ -32,7 +32,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
 
-  const { users, setIsOpen, userId } = useSiteContext()
+  const { users, setOpenDash} = useSiteContext()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,7 +66,7 @@ export default function LoginPage() {
         title: `Sn. ${controlName} `,
         description: " Başarılı bir şekilde giriş yapılmıştır .",
       })
-      setIsOpen(true)
+      setOpenDash(true)
       console.log(values.email)
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -82,6 +82,7 @@ export default function LoginPage() {
       <div className='flex'  >
         <div className='basis-2/4 mt-8' >
           <h1 className='text-center text-2xl'> poliknlik randevu sistemi</h1>
+          <h1 className='text-center text-2xl'> Admin giriş paneli</h1>
           <div className='flex justify-center text-center mt-16' >
             <Form  {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -112,13 +113,9 @@ export default function LoginPage() {
                   )}
                 />
                 <div className='flex flex-col space-y-4'>
-
                   <Button className='w-[518px] bg-green-400 hover:bg-green-300' type="submit">Giriş</Button>
-                  <Link href={'/register'} >
+                  <Link href={'/login'} >
                     <Button className='w-[518px] bg-blue-400 hover:bg-blue-300'>Kayıt ol</Button>
-                  </Link>
-                  <Link href={'/admin/login'} >
-                    <Button className='w-[518px] bg-red-400 hover:bg-red-300'>Admin</Button>
                   </Link>
                 </div>
               </form>
