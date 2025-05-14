@@ -1,6 +1,7 @@
 'use client'
+
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -32,7 +33,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
 
-  const { users, setOpenDash} = useSiteContext()
+  const { users, setOpenDash } = useSiteContext()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,7 +46,8 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const controlName = users.filter(user => user.Email === values.email).map(e => e.FullName)
-    // const controlAdmin = users.filter(user => user.Role === values.).map(e => e.FullName)
+    const controlAdmin = users.filter(user => user.Email === values.email).map(e => e.Role)
+    console.log(controlAdmin ,'control admin  filer')
     if (!controlName.length) {
       toast({
         variant: 'destructive',
@@ -54,28 +56,30 @@ export default function LoginPage() {
       });
       return;
     }
-
-    try {
-      const response = await axios.post('/api/login', values);
-      const { token } = response.data;
-      console.log("tokennnnn", token)
-      sessionStorage.setItem('jwtToken', token);
-      console.log("Kayıt mesaj: ", response.data.message)
-      toast({
-        variant: 'successful',
-        title: `Sn. ${controlName} `,
-        description: " Başarılı bir şekilde giriş yapılmıştır .",
-      })
-      setOpenDash(true)
-      console.log(values.email)
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Kayıt hatası:', error.response?.data.error || error.message)
-      } else {
-        console.error('kayıt katası', error)
+    if (controlAdmin[0] === 'admin') {
+      try {
+        const response = await axios.post('/api/login', values);
+        const { token } = response.data;
+        console.log("tokennnnn", token)
+        sessionStorage.setItem('jwtToken', token);
+        console.log("Kayıt mesaj: ", response.data.message)
+        toast({
+          variant: 'successful',
+          title: `Sn. ${controlName} `,
+          description: " Başarılı bir şekilde giriş yapılmıştır .",
+        })
+        setOpenDash(true)
+        console.log(values.email)
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error('Kayıt hatası:', error.response?.data.error || error.message)
+        } else {
+          console.error('kayıt katası', error)
+        }
       }
     }
     console.log(values)
+
   }
   return (
     <>
@@ -115,7 +119,7 @@ export default function LoginPage() {
                 <div className='flex flex-col space-y-4'>
                   <Button className='w-[518px] bg-green-400 hover:bg-green-300' type="submit">Giriş</Button>
                   <Link href={'/login'} >
-                    <Button className='w-[518px] bg-blue-400 hover:bg-blue-300'>Kayıt ol</Button>
+                    <Button className='w-[518px] bg-red-400 hover:bg-red-300'>kullanıcı giriş</Button>
                   </Link>
                 </div>
               </form>
