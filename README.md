@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MHRS Clone (Poliklinik Randevu Sistemi)
 
-## Getting Started
+Bu proje, bir poliklinik (veya MHRS) randevu sisteminin temelini oluşturan bir Next.js uygulamasıdır. 
+Admin panelinden hastane, departman ve doktor eklenebilir.  
+Kullanıcılar randevu alabilir ve doktorlar görüntülenebilir.
 
-First, run the development server:
+## 🚀 Başlangıç
+
+### 1. Gerekli Kurulumlar
+
+#### Node.js Kurulumu
+
+Projenin çalışması için Node.js yüklü olmalıdır.  
+İndirmek için: [https://nodejs.org/](https://nodejs.org/)
+
+#### XAMPP Kurulumu
+
+Veritabanı olarak MySQL kullanılmıştır.  
+XAMPP ile MySQL sunucusunu başlatmanız gerekir.  
+İndirmek için: [https://www.apachefriends.org/tr/index.html](https://www.apachefriends.org/tr/index.html)
+
+
+## 🔗 Projeyi Klonlayın veya İndirin
+
+### 1. Git İle Klonlamak (Tavsiye Edilir)
+
+Eğer bilgisayarınızda Git kuruluysa, terminale (örneğin Git Bash) şu komutu yazın:
+
+```bash
+git clone https://github.com/kasimugur/polyclinic_appointment_system_App.git
+cd polyclinic_appointment_system_App
+```
+veya
+### 2. ZIP Olarak İndirmek
+
+Alternatif olarak [bu bağlantıdan](https://github.com/kasimugur/polyclinic_appointment_system_App/archive/refs/heads/main.zip) ZIP dosyasını indirip klasöre çıkarabilirsiniz.
+
+---
+
+## ⚙️ Veritabanı Ayarları
+
+
+- XAMPP'i başlatın ve MySQL sunucusunu çalıştırın.
+- phpMyAdmin üzerinden `poliklinikdb` adında yeni bir veritabanı oluşturun.
+- Projede `sql/poliklinikdb.sql` adında bir SQL dosyası varsa bunu içeri aktarın.
+
+
+## 🔐 Ortam Değişkenleri Ayarlama
+
+Proje klasörünün kök dizinine gelin. Burada `.env.example` dosyası var.
+
+### 1. Kopyalayın ve adını değiştirin:
+```bash
+cp .env.example .env
+```
+
+### 2. `.env` içeriği şöyle olmalı (zaten örnek dosyada var):
+```env
+# Sunucunun hangi portta çalışacağını belirler.
+PORT=3000
+
+# Veritabanı bağlantı bilgileri
+DB_HOST=        # Veritabanı sunucusu genelde 'localhost' olur
+DB_USER=            # Varsayılan MySQL kullanıcı adı (XAMPP için genelde 'root')
+DB_PASSWORD=             # Eğer şifre belirlediysen buraya yaz (boşsa boş bırak)
+DB_NAME=    # Kullanacağınız veritabanı adı
+
+# JWT veya oturum işlemlerinde kullanılacak gizli anahtar
+SECRET_KEY=!askdfkasdk323?asd*  #örnek uQ7umYWwSKtu?ACnt?3MVj*RaA2V!Zrtz2c!km gibi
+
+```
+> Gerekirse `DB_USER`, `DB_PASSWORD` gibi bilgileri kendi ortamınıza göre düzenleyin.
+
+---
+
+## 📦 Paketleri Yükleme
+
+Proje klasöründe terminal açın:
+
+```bash
+npm install
+```
+
+---
+
+## 🚀 Projeyi Başlatma
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aşağıdaki adresi tarayıcınızda açarak uygulamayı görüntüleyebilirsiniz:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> İlk açılışta veritabanıyla bağlantı kurmak için birkaç saniye sürebilir.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+admin paneline giriş 
+```js
+admin@example.com  987321admin
+``` 
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Proje Özellikleri
 
-## Deploy on Vercel
+- Admin Dashboard
+  - Departman ekleme
+  - Hastane ekleme
+  - Doktor ekleme
+- API ile veri çekme ve gönderme
+- Context API kullanımı
+- React Hook Form ile form yönetimi
+- Shadcn UI bileşenleri
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠 Teknolojiler
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- React
+- Next.js
+- TypeScript
+- MySQL
+- Axios
+- Tailwind CSS
+- shadcn/ui
+
+---
+
+## 🧑‍💻 Geliştirici
+
+Kasım Uğur  
+Çiftçi 👨‍🌾 | Yazılımcı 👨‍💻 | Girişimci 🚀  
+🐄 Projeye katkıda bulunmak istersen iletişime geçebilirsin!
+
+---
+
+## ⚠️ Notlar
+
+- Geliştirme ortamı için önerilen Node.js sürümü: **v18+**
+- Veritabanı bağlantısında sorun yaşıyorsanız XAMPP'in MySQL portunun 3306 olduğundan emin olun.

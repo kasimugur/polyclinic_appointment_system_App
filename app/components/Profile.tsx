@@ -27,7 +27,6 @@ export default function Profile() {
   const handleClick = () => {
     setIsOpen(false)
     router.push('/login')
-
   }
   return (
     <Menubar className=''>
