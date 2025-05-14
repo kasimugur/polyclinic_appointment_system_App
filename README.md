@@ -57,7 +57,7 @@ cp .env.example .env
 ### 2. `.env` içeriği şöyle olmalı (zaten örnek dosyada var):
 ```env
 # Sunucunun hangi portta çalışacağını belirler.
-PORT=3000
+PORT=3000  #varsayılan
 
 # Veritabanı bağlantı bilgileri
 DB_HOST=        # Veritabanı sunucusu genelde 'localhost' olur
@@ -106,9 +106,10 @@ admin@example.com  987321admin
 ## 📁 Proje Özellikleri
 
 - Admin Dashboard
-  - Departman ekleme
-  - Hastane ekleme
-  - Doktor ekleme
+  - Departman, Doktor, Hastane ekleme
+- Kullanıcı paneli
+  - Randevu alma ve İptal etme gibi özellikler
+  - Kayıt olma
 - API ile veri çekme ve gönderme
 - Context API kullanımı
 - React Hook Form ile form yönetimi
